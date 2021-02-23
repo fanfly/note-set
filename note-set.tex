@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,top=2cm,bottom=3cm,left=1.5cm,right=1.5cm]{geometry}
+\usepackage{titling}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{thmtools}
+\usepackage[shortlabels]{enumitem}
+\usepackage{abstract}
+\usepackage{hyperref}
+
+\title{Set Theory}
+\date{Spring 2021}
+
+% bold math
+\makeatletter
+\g@addto@macro\bfseries{\boldmath}
+\makeatother
+
+% remove abstract title
+\renewcommand{\abstractname}{}
+\renewcommand{\absnamepos}{empty}
+
+% style of links
+\hypersetup{colorlinks,linkcolor=black}
+
+% set theorem style
+\declaretheoremstyle[
+  spaceabove=6pt, spacebelow=6pt,
+  headfont=\normalfont\bfseries,
+  notefont=\normalfont\bfseries,
+  bodyfont=\normalfont\upshape,
+  postheadspace=0.5em
+]{custom}
+
+% set qed symbol
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% types of theorems
+\declaretheorem[style=custom,parent=section]{definition}
+\declaretheorem[style=custom,sibling=definition]{example}
+\declaretheorem[style=custom,sibling=definition]{theorem}
+
+% use bold fonts to emphasize
+\DeclareTextFontCommand{\emph}{\bfseries}
+
+% math operators
+\DeclareMathOperator{\pow}{Pow}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+
+\begin{document}
+
+% title
+\begin{center}
+  \LARGE \bfseries \thetitle, \thedate
+\end{center}
+
+\begin{abstract}
+  This note is taken for the course "Set Theory", which is instructed by Hsueh-I Lu in Spring 2021.
+\end{abstract}
+
+\tableofcontents
+
+\section{February 23, 2021}
+\subsection{Course Introduction}
+\begin{itemize}
+  \item Scoring: Midterm exam ($50\%$) and final exam ($50\%$).
+  \item References:
+  \begin{itemize}
+    \item \textsl{Set Theory: A First Course}, by Daniel Cunningham (2016).
+    \item \textsl{Set Theory}, by Thomas Jech (2006).
+    \item \textsl{Set Theory: An Introduction to Independence Proofs}, by Kenneth Kunen (1983).
+    \item \textsl{Elements of Set Theory}, by Herbert Enderton (1977).
+  \end{itemize}
+\end{itemize}
+
+\subsection{History}
+\begin{itemize}
+  \item In 1874, it was proved by Georg Cantor that there is no one-to-one correspondence between the set of natural numbers and the set of real numbers.
+  Following that proof, the theory of ordinal and cardinal numbers was developed.
+  \item In 1908, the first axiomatization of set theory was presented by Ernst Zermelo.
+  However, the existence of some infinite sets cannot be proved in this theory.
+  \item In 1930, with revisions from Abraham Fraenkel, the axiomatization of Zermelo--Fraenkel set theory was presented, which is currently regarded as the most common foundation for mathematics.
+\end{itemize}
+
+\subsection{Why We Need Axiomatic Set Theory}
+A \emph{set} is a collection of distinct elements.
+One can define a set either by enumerating the elements of a set, or by describing the rules that a set should satisfy.
+However, if any properties are allowed to define a set, then one can construct a set which leads to a paradox.
+Following are some examples.
+
+\begin{itemize}
+  \item Russell's paradox: Suppose that $R = \{S: S \notin S\}$. Does $R \in R$ hold?
+  \item Berry's paradox: Suppose that $B$ is the set that contains exactly the smallest positive integer $b$ that is not definable in under sixty letters. Does $b \in B$ hold?
+\end{itemize}
+%
+In order to avoid paradoxes, we need axiomatic set theory as a foundation for mathematics.
+
+\begin{itemize}
+  \item The Zermelo--Fraenkel set theory with the axiom of choice included is called \emph{ZFC}.
+  \item If the axiom of choice is excluded, then the theory is called \emph{ZF}.
+\end{itemize}
+%
+In ZFC, all sets lie on an infinite hierarchy, which is called the von Neumann universe.
+
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \clip (-7,0) rectangle (7,4.5);
+    \draw (0,0) -- (-3,4) (0,0) -- (3,4);
+    \draw (-0.45,0.6) -- (0.45,0.6);
+    \draw (-0.9,1.2) -- (0.9,1.2);
+    \draw (-1.35,1.8) -- (1.35,1.8);
+    \draw (-1.8,2.4) -- (1.8,2.4);
+    \draw (-2.25,3) -- (2.25,3);
+    \draw (-2.7,3.6) -- (2.7,3.6);
+    \node[anchor=west] at (0.5,0.3) {$V_0 = \varnothing$};
+    \node[anchor=west] at (0.95,0.9) {$V_1 = V_0 \cup \pow(V_0)$};
+    \node[anchor=west] at (1.4,1.5) {$V_2 = V_1 \cup \pow(V_1)$};
+    \node at (0,2.2) {$\vdots$};
+    \node[anchor=west] at (2.3,2.7) {$V_\omega = \bigcup_{\alpha \in \omega} V_\alpha$};
+    \node[anchor=west] at (2.75,3.3) {$V_{\omega+1} = V_\omega \cup \pow(V_\omega)$};
+    \node at (0,4) {$\vdots$};
+  \end{tikzpicture}
+  \caption{The von Neumann universe.}
+\end{figure}
+
+\end{document}

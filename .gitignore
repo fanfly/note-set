@@ -1,0 +1,12 @@
+# Generated PDF output
+*.pdf
+
+# LaTeX temporary files
+*.aux
+*.log
+*.fls
+*.out
+*.toc
+
+# Latexmk
+*.fdb_latexmk
