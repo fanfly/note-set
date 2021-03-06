@@ -40,6 +40,8 @@
 % types of theorems
 \declaretheorem[style=custom,parent=section]{definition}
 \declaretheorem[style=custom,sibling=definition]{example}
+\declaretheorem[style=custom,sibling=definition]{axiom}
+\declaretheorem[style=custom,sibling=definition,name=Axiom Schema]{axiomschema}
 \declaretheorem[style=custom,sibling=definition]{theorem}
 
 % use bold fonts to emphasize
@@ -129,5 +131,70 @@ In ZFC, all sets lie on an infinite hierarchy, which is called the von Neumann u
   \end{tikzpicture}
   \caption{The von Neumann universe.}
 \end{figure}
+
+\section{March 2, 2021}
+\subsection{Logic}
+It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ when writing first-order logic formulas, and the following abbreviations are adopted for simplicity.
+\begin{align*}
+  (\phi \vee \psi) \quad &\equiv \quad \neg (\neg \phi \wedge \neg \psi) \\
+  (\phi \rightarrow \psi) \quad &\equiv \quad (\neg \phi \vee \psi) \\
+  (\phi \leftrightarrow \psi) \quad &\equiv \quad ((\phi \rightarrow \psi) \wedge (\psi \rightarrow \phi)) \\
+  \exists x \phi \quad &\equiv \quad \neg \forall x \neg \phi \\
+  (x \notin y) \quad &\equiv \quad \neg (x \in y) \\
+  (x = y) \quad &\equiv \quad (\forall w ((w \in x) \leftrightarrow (w \in y)) \wedge \forall z ((x \in z) \leftrightarrow (x \in y))) \\
+  (x \neq y) \quad &\equiv \quad \neg (x = y) \\
+  (x \subseteq y) \quad &\equiv \quad \forall w ((w \in x) \rightarrow (w \in y)) \\
+  (x \not \subseteq y) \quad &\equiv \quad \neg (x \subseteq y) \\
+  (x \subset y) \quad &\equiv \quad ((x \subseteq y) \wedge (x \neq y)).
+\end{align*}
+Parentheses can be omiited when the context is clear.
+
+\subsection{Basic Axioms}
+We starts with the axiom of empty set.
+
+\begin{axiom}[Empty Set]
+  $\exists x \forall y (y \notin x)$.
+\end{axiom}
+
+Now we have at least an empty set $\varnothing$, and we need the axiom of extensionality to prove that the empty set is unique.
+
+\begin{axiom}[Extensionality]
+  $\forall x \forall y (\forall z ((z \in x) \leftrightarrow (z \in y)) \rightarrow (x = y))$.
+\end{axiom}
+
+Note that $x = y$ implies $x \subseteq y$ and $y \subseteq x$ by definition of equality.
+By the axiom of extensionality, we can prove that $x \subseteq y$ and $y \subseteq x$ imply $x = y$.
+
+\begin{axiom}[Pairing]
+  $\forall x \forall y \exists z \forall w ((w \in z) \leftrightarrow ((z = x) \vee (z = y)))$.
+\end{axiom}
+
+Now there exists a set $\{x, y\}$ for any $x$ and $y$.
+We can construct the sets $\{\varnothing\}$ and $\{\varnothing, \{\varnothing\}\}$.
+
+\begin{axiom}[Union]
+  $\forall x \exists y \forall z ((z \in y) \leftrightarrow \exists w ((z \in w) \wedge (w \in x)))$.
+\end{axiom}
+
+The unary union of $x$ is denoted by $\bigcup x$.
+Define $x \cup y = \bigcup \{x, y\}$.
+It can be verified that associativity holds for unions.
+
+\begin{axiomschema}[Separation]
+  $\forall x \forall w_1 \forall w_2 \cdots \forall w_k \exists y \forall z ((z \in y) \leftrightarrow ((z \in x) \wedge \phi))$, where $\phi$ is a formula in which only $w_1, w_2, \dots, w_k, x, z$ are free.
+\end{axiomschema}
+
+Now from a set $x$ we can construct a set $\{y \in x: \phi\}$.
+Define $x \cap y = \{z \in x: z \in y\}$ and $x \setminus y = \{z \in x: z \notin y\}$.
+It can be verified that associativity holds for intersections.
+We can prove that there is no set containing all sets, since otherwise Russell's paradox occurs.
+For a nonempty set $x$, we can construct the unary intersection $\bigcap x$ of $x$.
+
+\begin{axiom}[Power Set]
+  $\forall x \exists y \forall z ((z \in y) \leftrightarrow (z \subseteq x))$.
+\end{axiom}
+
+Now we can construct the power set $\pow(x) = \{y: y \subseteq x\}$ of $x$.
+Also, we can construct $\{\{y\}: y \in x\}$ for any $x$ since it is a subset of $\pow(x)$.
 
 \end{document}
