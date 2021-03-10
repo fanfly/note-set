@@ -43,12 +43,17 @@
 \declaretheorem[style=custom,sibling=definition]{axiom}
 \declaretheorem[style=custom,sibling=definition,name=Axiom Schema]{axiomschema}
 \declaretheorem[style=custom,sibling=definition]{theorem}
+\declaretheorem[style=custom,sibling=definition]{corollary}
 
 % use bold fonts to emphasize
 \DeclareTextFontCommand{\emph}{\bfseries}
 
 % math operators
 \DeclareMathOperator{\pow}{Pow}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\ran}{ran}
+
+\newcommand{\id}{\mathrm{id}}
 
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\ZZ}{\mathbb{Z}}
@@ -97,8 +102,8 @@ However, if any properties are allowed to define a set, then one can construct a
 Following are some examples.
 
 \begin{itemize}
-  \item Russell's paradox: Suppose that $R = \{S: S \notin S\}$. Does $R \in R$ hold?
-  \item Berry's paradox: Suppose that $B$ is the set that contains exactly the smallest positive integer $b$ that is not definable in under sixty letters. Does $b \in B$ hold?
+  \item Russell's paradox: Suppose that $R = \{S: S \notin S\}$. Then $R \in R$ if and only if $R \notin R$.
+  \item Berry's paradox: Suppose that $B$ is the set that contains exactly the smallest positive integer $b$ that is not definable in under sixty letters. Then $b \in B$ if and only if $b \notin B$.
 \end{itemize}
 %
 In order to avoid paradoxes, we need axiomatic set theory as a foundation for mathematics.
@@ -136,65 +141,291 @@ In ZFC, all sets lie on an infinite hierarchy, which is called the von Neumann u
 \subsection{Logic}
 It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ when writing first-order logic formulas, and the following abbreviations are adopted for simplicity.
 \begin{align*}
-  (\phi \vee \psi) \quad &\equiv \quad \neg (\neg \phi \wedge \neg \psi) \\
-  (\phi \rightarrow \psi) \quad &\equiv \quad (\neg \phi \vee \psi) \\
-  (\phi \leftrightarrow \psi) \quad &\equiv \quad ((\phi \rightarrow \psi) \wedge (\psi \rightarrow \phi)) \\
-  \exists x \phi \quad &\equiv \quad \neg \forall x \neg \phi \\
-  (x \notin y) \quad &\equiv \quad \neg (x \in y) \\
-  (x = y) \quad &\equiv \quad (\forall w ((w \in x) \leftrightarrow (w \in y)) \wedge \forall z ((x \in z) \leftrightarrow (x \in y))) \\
-  (x \neq y) \quad &\equiv \quad \neg (x = y) \\
-  (x \subseteq y) \quad &\equiv \quad \forall w ((w \in x) \rightarrow (w \in y)) \\
-  (x \not \subseteq y) \quad &\equiv \quad \neg (x \subseteq y) \\
-  (x \subset y) \quad &\equiv \quad ((x \subseteq y) \wedge (x \neq y)).
+  \varphi \vee \psi \quad &\equiv \quad \neg (\neg \varphi \wedge \neg \psi), \\
+  \varphi \rightarrow \psi \quad &\equiv \quad \neg \varphi \vee \psi, \\
+  \varphi \leftrightarrow \psi \quad &\equiv \quad (\varphi \rightarrow \psi) \wedge (\psi \rightarrow \varphi), \\
+  \exists x \varphi \quad &\equiv \quad \neg \forall x \neg \varphi, \\
+  x \notin y \quad &\equiv \quad \neg (x \in y), \\
+  x = y \quad &\equiv \quad \forall w (w \in x \leftrightarrow w \in y) \wedge \forall z (x \in z \leftrightarrow y \in z), \\
+  x \neq y \quad &\equiv \quad \neg (x = y), \\
+  x \subseteq y \quad &\equiv \quad \forall w (w \in x \rightarrow w \in y), \\
+  x \subset y \quad &\equiv \quad x \subseteq y \wedge x \neq y.
 \end{align*}
-Parentheses can be omiited when the context is clear.
 
-\subsection{Basic Axioms}
-We starts with the axiom of empty set.
-
+\subsection{An Empty Set}
 \begin{axiom}[Empty Set]
-  $\exists x \forall y (y \notin x)$.
+  There exists a set that contains no members.
+  \begin{equation*}
+    \exists y \forall x (x \notin y).
+  \end{equation*}
 \end{axiom}
 
-Now we have at least an empty set $\varnothing$, and we need the axiom of extensionality to prove that the empty set is unique.
+\begin{definition}
+  Let $\varnothing$ denote a set that contains no members.
+  \begin{equation*}
+    \forall x (x \notin \varnothing).
+  \end{equation*}
+\end{definition}
 
+\subsection{Equality}
 \begin{axiom}[Extensionality]
-  $\forall x \forall y (\forall z ((z \in x) \leftrightarrow (z \in y)) \rightarrow (x = y))$.
+  Two sets are equal if they contain exactly the same elements.
+  \begin{equation*}
+    \forall x \forall y (\forall w (w \in x \leftrightarrow w \in y) \rightarrow x = y). 
+  \end{equation*}
 \end{axiom}
 
-Note that $x = y$ implies $x \subseteq y$ and $y \subseteq x$ by definition of equality.
-By the axiom of extensionality, we can prove that $x \subseteq y$ and $y \subseteq x$ imply $x = y$.
-
+\subsection{Unordered Pairs}
 \begin{axiom}[Pairing]
-  $\forall x \forall y \exists z \forall w ((w \in z) \leftrightarrow ((z = x) \vee (z = y)))$.
+  For any two sets $x$ and $y$, there is a set that contains exactly both $x$ and $y$.
+  \begin{equation*}
+    \forall x \forall y \exists z \forall w (w \in z \leftrightarrow (w = x \vee w = y)).
+  \end{equation*}
 \end{axiom}
 
-Now there exists a set $\{x, y\}$ for any $x$ and $y$.
-We can construct the sets $\{\varnothing\}$ and $\{\varnothing, \{\varnothing\}\}$.
+\begin{definition}
+  Let $\{x, y\}$ denote the set that contains exactly both $x$ and $y$.
+  \begin{equation*}
+    \forall x \forall y \forall w (w \in \{x, y\} \leftrightarrow (w = x \vee w = y)).
+  \end{equation*}
+  Also, let $\{x\} = \{x, x\}$.
+  \begin{equation*}
+    \forall x \forall w (w \in \{x\} \leftrightarrow w = x).
+  \end{equation*}
+\end{definition}
 
+\subsection{Unions}
 \begin{axiom}[Union]
-  $\forall x \exists y \forall z ((z \in y) \leftrightarrow \exists w ((z \in w) \wedge (w \in x)))$.
+  For any set $y$, there exists a set that is the union of all members of $y$.
+  \begin{equation*}
+    \forall y \exists z \forall w (w \in z \leftrightarrow \exists x (w \in x \wedge x \in y)).
+  \end{equation*}
 \end{axiom}
 
-The unary union of $x$ is denoted by $\bigcup x$.
-Define $x \cup y = \bigcup \{x, y\}$.
-It can be verified that associativity holds for unions.
+\begin{definition}
+  The union of all members of $y$ is denoted by $\bigcup y$.
+  \begin{equation*}
+    \forall y \forall w \Bigl(w \in \bigcup y \leftrightarrow \exists x (w \in x \wedge x \in y)\Bigr).
+  \end{equation*}
+\end{definition}
 
+\begin{definition}
+  For any sets $x$ and $y$, we define
+  \begin{equation*}
+    x \cup y = \bigcup \{x, y\}.
+  \end{equation*}
+\end{definition}
+
+\subsection{Subsets}
 \begin{axiomschema}[Separation]
-  $\forall x \forall w_1 \forall w_2 \cdots \forall w_k \exists y \forall z ((z \in y) \leftrightarrow ((z \in x) \wedge \phi))$, where $\phi$ is a formula in which only $w_1, w_2, \dots, w_k, x, z$ are free.
+  For any set $x$ and any property $\varphi$, there exists a set $y$ of $x$ that contains exactly all members of $x$ that satisfy $\varphi$.
+  Formally, for any formula $\varphi$ whose free variables are among $v_1, v_2, \dots, v_k, w, x$, there exists an axiom
+  \begin{equation*}
+    \forall v_1 \forall v_2 \cdots \forall v_k \forall x \exists y \forall w (w \in y \leftrightarrow w \in x \wedge \varphi).
+  \end{equation*}
 \end{axiomschema}
 
-Now from a set $x$ we can construct a set $\{y \in x: \phi\}$.
-Define $x \cap y = \{z \in x: z \in y\}$ and $x \setminus y = \{z \in x: z \notin y\}$.
-It can be verified that associativity holds for intersections.
-We can prove that there is no set containing all sets, since otherwise Russell's paradox occurs.
-For a nonempty set $x$, we can construct the unary intersection $\bigcap x$ of $x$.
+\begin{definition}
+  For any set $x$ and any property $\varphi$, the set that contains members of $x$ that satisfy $\varphi$ is denoted by $\{w \in x: \varphi\}$.
+\end{definition}
 
+\begin{definition}
+  For any sets $x$ and $y$, we define
+  \begin{align*}
+    x \cap y &= \{w \in x: w \in y\}, \\
+    x \setminus y &= \{w \in x: w \notin y\}.
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  The intersection of all members of a nonempty set $y$ is denoted by $\bigcap y$.
+  \begin{equation*}
+    \bigcap y = \Bigl\{w \in \bigcup y: \forall x (x \in y \to w \in x)\Bigr\}.
+  \end{equation*}
+\end{definition}
+
+\subsection{Power Sets}
 \begin{axiom}[Power Set]
-  $\forall x \exists y \forall z ((z \in y) \leftrightarrow (z \subseteq x))$.
+  For any set $x$, there exists a set that contains all subsets of $x$.
+  \begin{equation*}
+    \forall x \exists y \forall z (z \in y \leftrightarrow z \subseteq x).
+  \end{equation*}
 \end{axiom}
 
-Now we can construct the power set $\pow(x) = \{y: y \subseteq x\}$ of $x$.
-Also, we can construct $\{\{y\}: y \in x\}$ for any $x$ since it is a subset of $\pow(x)$.
+\begin{definition}
+  For any set $x$, the set containing all subsets of $x$ is called the \emph{power set} of $x$, denoted by $\pow(x)$.
+  \begin{equation*}
+    \forall x \forall z (z \in \pow(x) \leftrightarrow z \subseteq x).
+  \end{equation*}
+\end{definition}
+
+\section{March 9, 2021}
+\subsection{Ordered Pairs}
+\begin{definition}
+  For any sets $x$ and $y$, let $(x, y) = \{\{x\}, \{x, y\}\}$.
+\end{definition}
+
+\begin{theorem}
+  Let $P = (x, y)$.
+  Then
+  \begin{align*}
+    x &= \bigcap \bigcap P, \\
+    y &= \bigcap \Bigl\{w \in \bigcup P: w \notin \bigcap P \vee \bigcap P = \bigcup P\Bigr\}.
+  \end{align*}
+\end{theorem}
+\begin{proof}
+  Note that $\bigcap P = \{x\}$ and $\bigcup P = \{x, y\}$.
+  It follows that $\bigcap \bigcap P = x$ holds, and we have $\bigcap P = \bigcup P$ if and only if $x = y$.
+  Thus,
+  \begin{equation*}
+    \bigcap \Bigl\{w \in \bigcup P: w \notin \bigcap P \vee \bigcap P = \bigcup P\Bigr\}
+    = \bigcap \{w \in \{x, y\}: w \neq x \vee x = y\}
+    = \bigcap \{y\}
+    = y.
+    \qedhere
+  \end{equation*}
+\end{proof}
+
+\begin{corollary}
+  For any sets $u$, $v$, $x$ and $y$, we have $(u, v) = (x, y)$ if and only if $u = x$ and $v = y$.
+\end{corollary}
+\begin{proof}
+  Clearly $u = x$ and $v = y$ imply
+  \begin{equation*}
+    (u, v)
+    = \{\{u\}, \{u, v\}\}
+    = \{\{x\}, \{x, y\}\}
+    = (x, y).
+  \end{equation*}
+  If $(u, v) = (x, y)$, then
+  \begin{equation*}
+    u = \bigcap \bigcap (u, v) = \bigcap \bigcap (x, y) = x
+  \end{equation*}
+  and
+  \begin{align*}
+    v
+    &= \bigcap \Bigl\{w \in \bigcup (u, v): w \notin \bigcap (u, v) \vee \bigcap (u, v) = \bigcup (u, v)\Bigr\} \\
+    &= \bigcap \Bigl\{w \in \bigcup (x, y): w \notin \bigcap (x, y) \vee \bigcap (x, y) = \bigcup (x, y)\Bigr\} \\
+    &= y.
+    \qedhere
+  \end{align*}
+\end{proof}
+
+\begin{definition}
+  The \emph{Cartesian product} of two sets $X$ and $Y$, denoted by $X \times Y$, is defined by
+  \begin{equation*}
+    X \times Y = \{P \in \pow(\pow(X \cup Y)): \exists x \exists y (x \in X \wedge y \in Y \wedge (x, y) = P)\}.
+  \end{equation*}
+\end{definition}
+
+\subsection{Relations}
+\begin{definition}
+  A \emph{relation} is a set $R$ such that each member of $R$ is an ordered pair.
+\end{definition}
+
+\begin{definition}
+  For any relation $R$, the \emph{domain} and the \emph{range} of $R$, denoted by $\dom(R)$ and $\ran(R)$, respectively, are defined by
+  \begin{align*}
+    \dom(R) &= \Bigl\{x \in \bigcup \bigcup R: \exists y ((x, y) \in R) \Bigr\}, \\
+    \ran(R) &= \Bigl\{y \in \bigcup \bigcup R: \exists x ((x, y) \in R) \Bigr\}.
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  For any relation $R$, the \emph{inverse} of $R$, denoted by $R^{-1}$, is defined by
+  \begin{equation*}
+    R^{-1} = \{P \in \ran(R) \times \dom(R): \exists x \exists y ((x, y) \in R \wedge (y, x) = P)\}.
+  \end{equation*}
+\end{definition}
+
+\begin{definition}
+  For any relations $R$ and $S$, the \emph{composition} of $R$ and $S$, denoted by $S \circ R$, is defined by
+  \begin{equation*}
+    S \circ R = \{P \in \dom(R) \times \ran(S): \exists x \exists y \exists z ((x, y) \in R \wedge (y, z) \in S \wedge (x, z) = P)\}.
+  \end{equation*}
+\end{definition}
+
+\begin{definition}
+  For any relation $R$ and any set $X$, the \emph{restriction} of $R$ to $X$, denoted by $R|_X$, is defined by
+  \begin{equation*}
+    R|_X = \{P \in R: \exists x \exists y (x \in X \wedge (x, y) = P\}.
+  \end{equation*}
+\end{definition}
+
+\begin{definition}
+  For any relation $R$ and any set $X$, the \emph{image} of $R$ under $X$, denoted by $R[X]$, is defined by
+  \begin{equation*}
+    R[X] = \ran(R|_X).
+  \end{equation*}
+\end{definition}
+
+\subsection{Functions}
+\begin{definition}
+  A \emph{function} is a relation $f$ such that for any set $x \in \dom(f)$, there exists a unique set $y \in \ran(f)$ such that $(x, y) \in f$.
+  If one writes $f: X \to Y$, then $f$ is a function with $\dom(f) = X$ and $\ran(f) \subseteq Y$, and $f$ is called a function from $X$ to $Y$.
+  For any function $f: X \to Y$ and any $x \in X$, let $f(x)$ denote the unique member of $Y$ with $(x, f(x)) \in f$.
+\end{definition}
+
+\begin{definition}
+  Let $X$ and $Y$ be sets.
+  \begin{itemize}
+    \item An \emph{injection} from $X$ to $Y$ is a function $f: X \to Y$ such that $f^{-1}$ is also a function.
+    \item A \emph{surjection} from $X$ to $Y$ is a function $f: X \to Y$ such that $\ran(f) = Y$.
+    \item A \emph{bijection} from $X$ to $Y$ is a function $f: X \to Y$ that is both an injection and a surjection from $X$ to $Y$.
+  \end{itemize}
+\end{definition}
+
+\subsection{Axiom of Choice}
+\begin{axiom}[Choice]
+  For any relation $R$, there exists a function $f \subseteq R$ with $\dom(f) = \dom(R)$.
+\end{axiom}
+
+\begin{theorem}
+  Let $f: X \to Y$ be a function with $X \neq \varnothing$.
+  Then there exists a function $g: Y \to X$ such that $g \circ f = \id_X$ if and only if $f$ is an injection from $X$ to $Y$.
+\end{theorem}
+\begin{proof}
+  First suppose that $g: Y \to X$ is a function such that $g \circ f = \id_X$.
+  For any $y \in Y$, let $x, x' \in X$ such that $(y, x), (y, x') \in f^{-1}$.
+  Then we have
+  \begin{equation*}
+    x = (g \circ f)(x) = g(f(x)) = g(y) = g(f(x')) = (g \circ f)(x') = x'.
+  \end{equation*}
+  Thus, $f^{-1}$ is a function, implying that $f$ is an injection from $X$ to $Y$.
+  \par Now suppose that $f$ is an injection from $X$ to $Y$, and let $x^\star$ be an arbitrary member of $X$.
+  Define
+  \begin{equation*}
+    g = f^{-1} \cup ((Y \setminus \ran(f)) \times \{x^\star\}).
+  \end{equation*}
+  Note that
+  \begin{itemize}
+    \item $f^{-1}$ is a function from $\ran(f)$ to $X$, and
+    \item $(Y \setminus \ran(f)) \times \{x^\star\}$ is a function from $Y \setminus \ran(f)$ to $X$.
+  \end{itemize}
+  Thus, $g$ is a function from $Y$ to $X$.
+  We have $g \circ f = \id_X$ since
+  \begin{equation*}
+    (g \circ f)(x) = g(f(x)) = f^{-1}(f(x)) = x
+  \end{equation*}
+  holds for each $x \in X$.
+\end{proof}
+
+\begin{theorem}
+  Let $f: X \to Y$ be a function with $X \neq \varnothing$.
+  Then there exists a function $g: Y \to X$ such that $f \circ g = \id_Y$ if and only if $f$ is a surjection from $X$ to $Y$.
+\end{theorem}
+\begin{proof}
+  First suppose that $g: Y \to X$ is a function such that $f \circ g = \id_Y$.
+  For any $y \in Y$, we have
+  \begin{equation*}
+    y = (f \circ g)(y) = f(g(y)).
+  \end{equation*}
+  Thus, $f$ is a surjection from $X$ to $Y$.
+  \par Now suppose that $f$ is a surjection from $X$ to $Y$.
+  Then $f^{-1} \subseteq Y \times X$ is a relation.
+  By the axiom of choice, there exists a function $g: Y \to X$ with $g \subseteq f^{-1}$.
+  For any $y \in Y$, since $(y, g(y)) \in g \subseteq f^{-1}$, we have $(g(y), y) \in f$, implying $(f \circ g)(y) = f(g(y)) = y$.
+  Thus, $f \circ g = \id_Y$.
+\end{proof}
 
 \end{document}
