@@ -42,6 +42,7 @@
 \declaretheorem[style=custom,sibling=definition]{example}
 \declaretheorem[style=custom,sibling=definition]{axiom}
 \declaretheorem[style=custom,sibling=definition,name=Axiom Schema]{axiomschema}
+\declaretheorem[style=custom,sibling=definition]{proposition}
 \declaretheorem[style=custom,sibling=definition]{theorem}
 \declaretheorem[style=custom,sibling=definition]{corollary}
 
@@ -52,6 +53,7 @@
 \DeclareMathOperator{\pow}{Pow}
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\suc}{succ}
 
 \newcommand{\id}{\mathrm{id}}
 
@@ -426,6 +428,65 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
   By the axiom of choice, there exists a function $g: Y \to X$ with $g \subseteq f^{-1}$.
   For any $y \in Y$, since $(y, g(y)) \in g \subseteq f^{-1}$, we have $(g(y), y) \in f$, implying $(f \circ g)(y) = f(g(y)) = y$.
   Thus, $f \circ g = \id_Y$.
+\end{proof}
+
+\section{March 16, 2021}
+\subsection{Inductive Sets}
+\begin{definition}
+  Let $S$ be a set.
+  The \emph{successor} of $S$, denoted by $\suc(S)$, is defined by $\suc(S) = S \cup \{S\}$.
+\end{definition}
+
+\begin{example}
+  We have
+  \begin{align*}
+    \suc(\varnothing) &= \{\varnothing\}, \\
+    \suc(\{\varnothing\}) &= \{\varnothing, \{\varnothing\}\}, \\
+    \suc(\{\varnothing, \{\varnothing\}\}) &= \{\varnothing, \{\varnothing\}, \{\varnothing, \{\varnothing\}\}\}.
+  \end{align*}
+\end{example}
+
+\begin{definition}
+  A set $S$ is \emph{inductive} if $\varnothing \in S$, and $\suc(x) \in S$ for any $x \in S$.
+\end{definition}
+
+\begin{axiom}[Infinity]
+  There exists an inductive set.
+\end{axiom}
+
+\begin{definition}
+  Let $\omega$ denote the set containing the sets that are members of all inductive sets.
+\end{definition}
+
+\subsection{Peano System}
+\begin{definition}
+  Let $N$ be a set, let $s: N \to N$ be a function, and let $e \in N$.
+  We say that $(N, s, e)$ is a \emph{Peano system} if the following conditions hold.
+  \begin{enumerate}[(i)]
+    \item For any $n \in N$, $s(n) \neq e$.
+    \item For any $m, n \in N$, if $s(m) = s(n)$, then $m = n$.
+    \item For any $M \subseteq N$, if $e \in N$, and $s(n) \in M$ holds for each $n \in M$, then $M = N$.
+  \end{enumerate}
+\end{definition}
+
+\begin{theorem}
+  Let $I \subseteq \omega$.
+  If $I$ is inductive, then $I = \omega$.
+\end{theorem}
+\begin{proof}
+  Since $\omega$ is included in each inductive set, we have $\omega \subseteq I$.
+  Thus $I = \omega$.
+\end{proof}
+
+\begin{proposition}
+  For each nonempty $n \in \omega$, there exists $m \in \omega$ such that $\suc(m) = n$.
+\end{proposition}
+\begin{proof}
+  Let $I$ be the subset of $\omega$ containing the sets $n$ such that either $n = \varnothing$ or $n = \suc(m)$ for some $m \in \omega$.
+  Clearly $\varnothing \in I$.
+  If $n \in I$, then we have $\suc(n) \in I$.
+  Thus, $I$ is inductive, implying that $I = \omega$.
+  This completes the proof.
 \end{proof}
 
 \end{document}
