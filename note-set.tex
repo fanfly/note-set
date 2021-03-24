@@ -9,6 +9,7 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{abstract}
 \usepackage{hyperref}
+\usepackage{cleveref}
 
 \title{Set Theory}
 \date{Spring 2021}
@@ -54,6 +55,7 @@
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\ran}{ran}
 \DeclareMathOperator{\suc}{succ}
+\DeclareMathOperator{\prd}{pred}
 
 \newcommand{\id}{\mathrm{id}}
 
@@ -97,7 +99,7 @@
   \item In 1930, with revisions from Abraham Fraenkel, the axiomatization of Zermelo--Fraenkel set theory was presented, which is currently regarded as the most common foundation for mathematics.
 \end{itemize}
 
-\subsection{Why We Need Axiomatic Set Theory}
+\subsection{Motivation}
 A \emph{set} is a collection of distinct elements.
 One can define a set either by enumerating the elements of a set, or by describing the rules that a set should satisfy.
 However, if any properties are allowed to define a set, then one can construct a set which leads to a paradox.
@@ -141,33 +143,19 @@ In ZFC, all sets lie on an infinite hierarchy, which is called the von Neumann u
 
 \section{March 2, 2021}
 \subsection{Logic}
-It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ when writing first-order logic formulas, and the following abbreviations are adopted for simplicity.
+One can write first-order logic formulas with only the four symbols $\neg$, $\wedge$, $\forall$ and $\in$, and it is convenient to adopt the following abbreviations.
 \begin{align*}
   \varphi \vee \psi \quad &\equiv \quad \neg (\neg \varphi \wedge \neg \psi), \\
   \varphi \rightarrow \psi \quad &\equiv \quad \neg \varphi \vee \psi, \\
   \varphi \leftrightarrow \psi \quad &\equiv \quad (\varphi \rightarrow \psi) \wedge (\psi \rightarrow \varphi), \\
   \exists x \varphi \quad &\equiv \quad \neg \forall x \neg \varphi, \\
-  x \notin y \quad &\equiv \quad \neg (x \in y), \\
   x = y \quad &\equiv \quad \forall w (w \in x \leftrightarrow w \in y) \wedge \forall z (x \in z \leftrightarrow y \in z), \\
-  x \neq y \quad &\equiv \quad \neg (x = y), \\
-  x \subseteq y \quad &\equiv \quad \forall w (w \in x \rightarrow w \in y), \\
-  x \subset y \quad &\equiv \quad x \subseteq y \wedge x \neq y.
+  x \subseteq y \quad &\equiv \quad \forall w (w \in x \rightarrow w \in y).
 \end{align*}
-
-\subsection{An Empty Set}
-\begin{axiom}[Empty Set]
-  There exists a set that contains no members.
-  \begin{equation*}
-    \exists y \forall x (x \notin y).
-  \end{equation*}
-\end{axiom}
-
-\begin{definition}
-  Let $\varnothing$ denote a set that contains no members.
-  \begin{equation*}
-    \forall x (x \notin \varnothing).
-  \end{equation*}
-\end{definition}
+For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbols), let
+\begin{equation*}
+  x \not\sim y \quad \equiv \quad \neg (x \sim y).
+\end{equation*}
 
 \subsection{Equality}
 \begin{axiom}[Extensionality]
@@ -177,7 +165,19 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
   \end{equation*}
 \end{axiom}
 
-\subsection{Unordered Pairs}
+\subsection{The Empty Set}
+\begin{axiom}[Empty Set]
+  There exists a set that contains no members.
+  \begin{equation*}
+    \exists y \forall x (x \notin y).
+  \end{equation*}
+\end{axiom}
+
+\begin{definition}
+  Let $\varnothing$ denote the set that contains no members.
+\end{definition}
+
+\subsection{Pairing}
 \begin{axiom}[Pairing]
   For any two sets $x$ and $y$, there is a set that contains exactly both $x$ and $y$.
   \begin{equation*}
@@ -190,10 +190,7 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
   \begin{equation*}
     \forall x \forall y \forall w (w \in \{x, y\} \leftrightarrow (w = x \vee w = y)).
   \end{equation*}
-  Also, let $\{x\} = \{x, x\}$.
-  \begin{equation*}
-    \forall x \forall w (w \in \{x\} \leftrightarrow w = x).
-  \end{equation*}
+  Also, let $\{x\} = \{x, x\}$ for any set $x$.
 \end{definition}
 
 \subsection{Unions}
@@ -206,9 +203,6 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 
 \begin{definition}
   The union of all members of $y$ is denoted by $\bigcup y$.
-  \begin{equation*}
-    \forall y \forall w \Bigl(w \in \bigcup y \leftrightarrow \exists x (w \in x \wedge x \in y)\Bigr).
-  \end{equation*}
 \end{definition}
 
 \begin{definition}
@@ -220,15 +214,15 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 
 \subsection{Subsets}
 \begin{axiomschema}[Separation]
-  For any set $x$ and any property $\varphi$, there exists a set $y$ of $x$ that contains exactly all members of $x$ that satisfy $\varphi$.
-  Formally, for any formula $\varphi$ whose free variables are among $v_1, v_2, \dots, v_k, w, x$, there exists an axiom
+  For any set $x$, there exists a set $y$ that contains the members of $x$ that satisfy $\varphi$, where $\varphi$ is a formula in which $y$ does not occur.
+  That is, for any formula $\varphi$ whose free variables are among $v_1, v_2, \dots, v_k, w, x$, we have an axiom
   \begin{equation*}
-    \forall v_1 \forall v_2 \cdots \forall v_k \forall x \exists y \forall w (w \in y \leftrightarrow w \in x \wedge \varphi).
+    \forall v_1 \forall v_2 \cdots \forall v_k \forall x \exists y \forall w (w \in y \leftrightarrow (w \in x \wedge \varphi)).
   \end{equation*}
 \end{axiomschema}
 
 \begin{definition}
-  For any set $x$ and any property $\varphi$, the set that contains members of $x$ that satisfy $\varphi$ is denoted by $\{w \in x: \varphi\}$.
+  For any set $x$, the set consisting of the members of $x$ that satisfy $\varphi$ is denoted by $\{w \in x: \varphi\}$.
 \end{definition}
 
 \begin{definition}
@@ -240,7 +234,7 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 \end{definition}
 
 \begin{definition}
-  The intersection of all members of a nonempty set $y$ is denoted by $\bigcap y$.
+  The intersection of all members of a nonempty set $y$, denoted by $\bigcap y$, is defined by
   \begin{equation*}
     \bigcap y = \Bigl\{w \in \bigcup y: \forall x (x \in y \to w \in x)\Bigr\}.
   \end{equation*}
@@ -256,9 +250,6 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 
 \begin{definition}
   For any set $x$, the set containing all subsets of $x$ is called the \emph{power set} of $x$, denoted by $\pow(x)$.
-  \begin{equation*}
-    \forall x \forall z (z \in \pow(x) \leftrightarrow z \subseteq x).
-  \end{equation*}
 \end{definition}
 
 \section{March 9, 2021}
@@ -460,6 +451,7 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 
 \subsection{Peano System}
 \begin{definition}
+  \label{def:peano}
   Let $N$ be a set, let $s: N \to N$ be a function, and let $e \in N$.
   We say that $(N, s, e)$ is a \emph{Peano system} if the following conditions hold.
   \begin{enumerate}[(i)]
@@ -470,6 +462,7 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
 \end{definition}
 
 \begin{theorem}
+  \label{thm:induction}
   Let $I \subseteq \omega$.
   If $I$ is inductive, then $I = \omega$.
 \end{theorem}
@@ -487,6 +480,170 @@ It is sufficient to use the four symbols $\neg$, $\wedge$, $\forall$ and $\in$ w
   If $n \in I$, then we have $\suc(n) \in I$.
   Thus, $I$ is inductive, implying that $I = \omega$.
   This completes the proof.
+\end{proof}
+
+\section{March 23, 2021}
+\subsection{Transitive Sets}
+\begin{definition}
+  A set $T$ is \emph{transitive} if $\bigcup T \subseteq T$.
+\end{definition}
+
+\begin{example}
+  $\varnothing$, $\{\varnothing\}$, $\{\varnothing, \{\varnothing\}\}$, $\{\varnothing, \{\varnothing\}, \{\{\varnothing\}\}\}$, $\{\varnothing, \{\varnothing\}, \{\varnothing, \{\varnothing\}\}\}$ and $\{\varnothing, \{\varnothing\}, \{\{\varnothing\}\}, \{\varnothing, \{\varnothing\}\}\}$ are transitive sets.
+\end{example}
+
+\begin{theorem}
+  The following statements hold.
+  \begin{enumerate}[(a)]
+    \item Each member of $\omega$ is transitive.
+    \item $\omega$ is transitive.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item We show that $I = \{n \in \omega: \bigcup n \subseteq n\}$ is inductive.
+    Since $\bigcup \varnothing \subseteq \varnothing$, we have $\varnothing \in I$.
+    For each $n \in I$, we have $\bigcup n \subseteq n$, implying
+    \begin{equation*}
+      \bigcup \suc(n) = \bigcup (n \cup \{n\}) = \bigcup n \cup \bigcup \{n\} \subseteq n \cup \{n\} = \suc(n),
+    \end{equation*}
+    and thus $\suc(n) \in I$.
+    Thus $I$ is inductive, completing the proof.
+    \item First we show that $I = \{n \in \omega: n \subseteq \omega\}$ is inductive.
+    Clearly $\varnothing \in I$.
+    For each $n \in I$, we have $n \subseteq \omega$, and thus $\suc(n) = n \cup \{n\} \subseteq \omega$, implying $\suc(n) \in I$.
+    Hence, $I$ is inductive, i.e., $n \subseteq \omega$ for each $n \in \omega$.
+    \par Now we show that $\omega$ is transitive.
+    For each $n \in \bigcup \omega$, there exists $m \in \omega$ such that $n \in m$.
+    Then we have $m \subseteq \omega$, implying $n \in \omega$.
+    Thus, $\bigcup \omega \subseteq \omega$, i.e., $\omega$ is transitive.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+  \label{thm:predecessor}
+  The following statements hold.
+  \begin{enumerate}[(a)]
+    \item For any $n \in \omega$, $\bigcup \suc(n) = n$.
+    \item For any $m, n \in \omega$, $\suc(m) = \suc(n)$ implies $m = n$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Since $n$ is transitive, we have
+    \begin{equation*}
+      \bigcup \suc(n) = \bigcup (n \cup \{n\}) = \bigcup n \cup n = n.
+    \end{equation*}
+    \item If $\suc(m) = \suc(n)$, then $m = \bigcup \suc(m) = \bigcup \suc(n) = n$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{definition}
+  For each nonempty $n \in \omega$, the \emph{predecessor} of $n$, denoted by $\prd(n)$, is defined by $\prd(n) = \bigcup n$.
+\end{definition}
+
+\begin{theorem}
+  $(\omega, \sigma, \varnothing)$ is a Peano system, where $\sigma: \omega \to \omega$ is defined by $\sigma(n) = \suc(n)$ for each $n \in \omega$.
+\end{theorem}
+\begin{proof}
+  Immediate from \Cref{thm:induction} and \Cref{thm:predecessor} (b).
+\end{proof}
+
+\subsection{Recursion}
+\begin{theorem}[Recursion Theorem]
+  \label{thm:recursion}
+  For any set $N$, any function $s: N \to N$ and any $e \in N$, there exists a unique function $f: \omega \to N$ satisfying the following conditions.
+  \begin{enumerate}[(i)]
+    \item $f(\varnothing) = e$.
+    \item $f(\suc(n)) = s(f(n))$ for all $n \in \omega$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  In this proof, we call a function $h \subseteq \omega \times N$ \emph{useful} if it satisfies the following conditions.
+  \begin{enumerate}[(i)]
+    \item If $\varnothing \in \dom(h)$, then $h(\varnothing) = e$.
+    \item If $\suc(n) \in \dom(h)$ for some $n \in \omega$, then $n \in \dom(h)$ and $h(\suc(n)) = s(h(n))$.
+  \end{enumerate}
+  Let $f$ be the union of all useful functions.
+  \par First, we show that $f$ is a function.
+  To prove that $f$ is a function, it suffices to prove that
+  \begin{equation*}
+    I = \{n \in \omega: \forall x \forall x' (((n, x) \in f \wedge (n, x') \in f) \rightarrow x = x'))\}
+  \end{equation*}
+  is inductive.
+  Clearly $\varnothing \in I$.
+  Now suppose that $n \in I$, and we show that $\suc(n) \in I$.
+  If $(\suc(n), x) \in f$ and $(\suc(n), x') \in f$ for some $x, y \in N$, then $(\suc(n), x) \in h$ and $(\suc(n), x') \in h'$ for some useful functions $h$ and $h'$, and it follows that
+  \begin{equation*}
+    x = h(\suc(n)) = s(h(n)) = s(f(n)) = s(h'(n)) = h'(\suc(n)) = x'.
+  \end{equation*}
+  Thus, $f$ is a function.
+  \par Next we show that $\dom(f) = \omega$, i.e., $f$ is a function from $\omega$ to $N$.
+  It suffices to prove that $\dom(f)$ is inductive.
+  We have $\varnothing \in \dom(f)$ since $\{(\varnothing, e)\}$ is a useful function.
+  Now suppose that $n \in \dom(f)$, and we prove that $\suc(n) \in \dom(f)$.
+  Since $n \in \dom(f)$, there exists a useful function $h$ such that $n \in \dom(h)$.
+  If $\suc(n) \in \dom(h)$, then we have $\suc(n) \in \dom(f)$, completing the inductive step.
+  Otherwise, we have $\suc(n) \in \dom(h)$, and one can verify that
+  \begin{equation*}
+    h' = h \cup \{\suc(n), s(h(n))\}
+  \end{equation*}
+  is a useful function, implying $\suc(n) \in \dom(f)$.
+  Thus, $\dom(f) = \omega$.
+  \par Now we show that $f$ is useful.
+  Clearly $f(\varnothing) = e$ since $\{(\varnothing, e)\}$ is useful.
+  For any $n \in \omega$, let $h \subseteq f$ be a useful function such that $\suc(n) \in \dom(h)$, and we have
+  \begin{equation*}
+    f(\suc(n)) = h(\suc(n)) = s(h(n)) = s(f(n)).
+  \end{equation*}
+  Thus, $f$ is useful.
+  \par Finally, the uniqueness of $f$ follows from the fact that any useful function $f'$ with $\dom(f') = \omega$ concides with $f$.
+  This completes the proof.
+\end{proof}
+
+\begin{corollary}
+  \label{thm:peano-isomorphism}
+  Let $(N, s, e)$ be a Peano system.
+  Then there exists a unique bijection $f$ from $\omega$ to $N$ satisfying the following conditions.
+  \begin{enumerate}[(i)]
+    \item $f(\varnothing) = e$.
+    \item $f(\suc(n)) = s(f(n))$ for all $n \in \omega$.
+  \end{enumerate}
+\end{corollary}
+\begin{proof}
+  By recursion theorem, there exists a unique function $f: \omega \to N$ satisfying (i) and (ii).
+  It suffices to prove that $f$ is a bijection from $\omega$ to $N$.
+  \par First we show that $\ran(f) = N$.
+  Clearly $e = f(\varnothing) \in \ran(f)$.
+  If $x \in \ran(f)$, then $x = f(n)$ holds for some $n \in \omega$, implying $s(x) = s(f(n)) = f(\suc(n)) \in \ran(f)$.
+  Thus, $\ran(f) = N$.
+  \par Next we show that $f$ is injective.
+  It suffices to show that
+  \begin{equation*}
+    I = \{n \in \omega: \forall m (m \in \omega \to (f(m) = f(n) \to m = n))\}
+  \end{equation*}
+  is inductive.
+  For any $m \in \omega$, if $f(m) = f(\varnothing)$ and $m \neq \varnothing$, then
+  \begin{equation*}
+    e = f(\varnothing) = f(m) = f(\suc(\prd(m))) = s(f(\prd(m))),
+  \end{equation*}
+  contradition to the fact that $e \notin \ran(s)$.
+  Thus $\varnothing \in I$.
+  Now suppose that $n \in I$ holds for some $n \in \omega$, and we show that $\suc(n) \in I$.
+  For any $m \in \omega$, if $f(m) = f(\suc(n))$, then $m \neq \varnothing$ since
+  \begin{equation*}
+    f(\suc(n)) = s(f(n)) \neq e = f(\varnothing).
+  \end{equation*}
+  Then since $s$ is injective and
+  \begin{equation*}
+    s(f(\prd(m))) = f(\suc(\prd(m))) = f(m) = f(\suc(n)) = s(f(n)),
+  \end{equation*}
+  we have $f(\prd(m)) = f(n)$, and it follows from $n \in I$ that $\prd(m) = n$, implying $m = \suc(\prd(m)) = \suc(n)$.
+  Thus, $\suc(n) \in I$, completing the proof.
 \end{proof}
 
 \end{document}
