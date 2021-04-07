@@ -52,8 +52,8 @@
 
 % math operators
 \DeclareMathOperator{\pow}{Pow}
-\DeclareMathOperator{\dom}{dom}
-\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\dom}{Dom}
+\DeclareMathOperator{\ran}{Ran}
 \DeclareMathOperator{\suc}{succ}
 \DeclareMathOperator{\prd}{pred}
 
@@ -368,7 +368,7 @@ For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbo
   \end{itemize}
 \end{definition}
 
-\subsection{Axiom of Choice}
+\subsection{The Axiom of Choice}
 \begin{axiom}[Choice]
   For any relation $R$, there exists a function $f \subseteq R$ with $\dom(f) = \dom(R)$.
 \end{axiom}
@@ -449,7 +449,7 @@ For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbo
   Let $\omega$ denote the set containing the sets that are members of all inductive sets.
 \end{definition}
 
-\subsection{Peano System}
+\subsection{Peano Systems}
 \begin{definition}
   \label{def:peano}
   Let $N$ be a set, let $s: N \to N$ be a function, and let $e \in N$.
@@ -461,7 +461,7 @@ For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbo
   \end{enumerate}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[Induction Principle]
   \label{thm:induction}
   Let $I \subseteq \omega$.
   If $I$ is inductive, then $I = \omega$.
@@ -563,45 +563,41 @@ For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbo
   \end{enumerate}
 \end{theorem}
 \begin{proof}
-  In this proof, we call a function $h \subseteq \omega \times N$ \emph{useful} if it satisfies the following conditions.
+  Let us call a function $h \subseteq \omega \times N$ \emph{good} if it satisfies the following conditions.
   \begin{enumerate}[(i)]
     \item If $\varnothing \in \dom(h)$, then $h(\varnothing) = e$.
     \item If $\suc(n) \in \dom(h)$ for some $n \in \omega$, then $n \in \dom(h)$ and $h(\suc(n)) = s(h(n))$.
   \end{enumerate}
-  Let $f$ be the union of all useful functions.
-  \par First, we show that $f$ is a function.
-  To prove that $f$ is a function, it suffices to prove that
+  Let $f$ be the union of all good functions.
+  It suffices to prove that $f$ is the unique good function such that $\dom(f) = \omega$.
+  \par First, we show that $f$ is a function, i.e., $f[\{n\}]$ consists of at most one element for each $n \in \omega$.
+  Clearly $f[\{\varnothing\}]$ contains at most one element since $f[\{\varnothing\}] \subseteq \{e\}$.
+  Given that $f[\{n\}]$ contains at most one element for some $n \in \omega$, we show that $f[\{\suc(n)\}]$ also contains at most one element.
+  If $(\suc(n), x) \in f$ and $(\suc(n), x') \in f$ for some $x, y \in N$, then $(\suc(n), x) \in h$ and $(\suc(n), x') \in h'$ hold for some good functions $h$ and $h'$, implying
   \begin{equation*}
-    I = \{n \in \omega: \forall x \forall x' (((n, x) \in f \wedge (n, x') \in f) \rightarrow x = x'))\}
+    x = h(\suc(n)) = s(h(n)) = s(h'(n)) = h'(\suc(n)) = x'.
   \end{equation*}
-  is inductive.
-  Clearly $\varnothing \in I$.
-  Now suppose that $n \in I$, and we show that $\suc(n) \in I$.
-  If $(\suc(n), x) \in f$ and $(\suc(n), x') \in f$ for some $x, y \in N$, then $(\suc(n), x) \in h$ and $(\suc(n), x') \in h'$ for some useful functions $h$ and $h'$, and it follows that
-  \begin{equation*}
-    x = h(\suc(n)) = s(h(n)) = s(f(n)) = s(h'(n)) = h'(\suc(n)) = x'.
-  \end{equation*}
-  Thus, $f$ is a function.
-  \par Next we show that $\dom(f) = \omega$, i.e., $f$ is a function from $\omega$ to $N$.
-  It suffices to prove that $\dom(f)$ is inductive.
-  We have $\varnothing \in \dom(f)$ since $\{(\varnothing, e)\}$ is a useful function.
+  Thus, $f[\{\suc(n)\}]$ contains at most one element.
+  It follows from induction principle that $f$ is a good.
+  \par Next we show that $\dom(f) = \omega$, i.e., $\dom(f)$ is inductive.
+  We have $\varnothing \in \dom(f)$ since $\{(\varnothing, e)\}$ is a good function.
   Now suppose that $n \in \dom(f)$, and we prove that $\suc(n) \in \dom(f)$.
-  Since $n \in \dom(f)$, there exists a useful function $h$ such that $n \in \dom(h)$.
-  If $\suc(n) \in \dom(h)$, then we have $\suc(n) \in \dom(f)$, completing the inductive step.
-  Otherwise, we have $\suc(n) \in \dom(h)$, and one can verify that
+  Since $n \in \dom(f)$, there exists a good function $h$ such that $n \in \dom(h)$.
+  Obviously $\suc(n) \in \dom(h)$ implies $\suc(n) \in \dom(f)$.
+  If $\suc(n) \notin \dom(h)$, then one can verify that
   \begin{equation*}
     h' = h \cup \{\suc(n), s(h(n))\}
   \end{equation*}
-  is a useful function, implying $\suc(n) \in \dom(f)$.
+  is a good function, implying $\suc(n) \in \dom(f)$.
   Thus, $\dom(f) = \omega$.
-  \par Now we show that $f$ is useful.
-  Clearly $f(\varnothing) = e$ since $\{(\varnothing, e)\}$ is useful.
-  For any $n \in \omega$, let $h \subseteq f$ be a useful function such that $\suc(n) \in \dom(h)$, and we have
+  \par Now we show that $f$ is good.
+  Clearly $f(\varnothing) = e$ since $\{(\varnothing, e)\}$ is good.
+  For any $n \in \omega$, let $h \subseteq f$ be a good function such that $\suc(n) \in \dom(h)$, and we have
   \begin{equation*}
     f(\suc(n)) = h(\suc(n)) = s(h(n)) = s(f(n)).
   \end{equation*}
-  Thus, $f$ is useful.
-  \par Finally, the uniqueness of $f$ follows from the fact that any useful function $f'$ with $\dom(f') = \omega$ concides with $f$.
+  Thus, $f$ is good.
+  \par Finally, the uniqueness of $f$ follows from the fact that any good function $f'$ with $\dom(f') = \omega$ concides with $f$.
   This completes the proof.
 \end{proof}
 
@@ -644,6 +640,312 @@ For any relation symbol $\sim$ (e.g., $\in$, $=$, $\subseteq$ are relation symbo
   \end{equation*}
   we have $f(\prd(m)) = f(n)$, and it follows from $n \in I$ that $\prd(m) = n$, implying $m = \suc(\prd(m)) = \suc(n)$.
   Thus, $\suc(n) \in I$, completing the proof.
+\end{proof}
+
+\section{March 30, 2021}
+From now on, we adopt the general representation for the successors of $\varnothing$, i.e., let $0 = \varnothing$, $1 = \suc(\varnothing)$, $2 = \suc(\suc(\varnothing))$, and so on.
+
+\subsection{Addition}
+\begin{definition}
+  For each $m, n \in \omega$, we define
+  \begin{equation*}
+    m + n = A_m(n),
+  \end{equation*}
+  where $A_m: \omega \to \omega$ is the function such that $A_m(0) = m$, and $A_m(\suc(n)) = \suc(A_m(n))$ for each $n \in \omega$.
+\end{definition}
+
+\begin{proposition}
+  For each $n \in \omega$, $\suc(n) = n + 1$.
+\end{proposition}
+\begin{proof}
+  We have $\suc(n) = \suc(n + 0) = n + \suc(0) = n + 1$.
+\end{proof}
+
+\begin{proposition}
+  The following statements hold for any $n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item $0 + n = n$.
+    \item $1 + n = n + 1$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Induction on $n$.
+    Clearly $0 + 0 = 0$.
+    Also, $0 + n = n$ implies $0 + (n + 1) = (0 + n) + 1 = n + 1$.
+    \item Induction on $n$.
+    Clearly $1 + 0 = 1 = 0 + 1$.
+    Also, $1 + n = n + 1$ implies
+    \begin{equation*}
+      1 + (n + 1) = (1 + n) + 1 = (n + 1) + 1.
+      \qedhere
+    \end{equation*}
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+  The following statements hold for any $\ell, m, n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item (Associativity) $(\ell + m) + n = \ell + (m + n)$.
+    \item (Commutativity) $m + n = n + m$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Induction on $n$.
+    Clearly
+    \begin{equation*}
+      (\ell + m) + 0
+      = \ell + m
+      = \ell + (m + 0).
+    \end{equation*}
+    Also, $(\ell + m) + n = \ell + (m + n)$ implies
+    \begin{align*}
+      (\ell + m) + (n + 1)
+      &= ((\ell + m) + n) + 1 \\
+      &= (\ell + (m + n)) + 1 \\
+      &= \ell + ((m + n) + 1) \\
+      &= \ell + (m + (n + 1)).
+    \end{align*}
+    \item Induction on $n$.
+    Clearly $m + 0 = m = 0 + m$.
+    Also, $m + n = n + m$ implies
+    \begin{equation*}
+      m + (n + 1)
+      = (m + n) + 1
+      = (n + m) + 1
+      = n + (m + 1)
+      = n + (1 + m)
+      = (n + 1) + m.
+      \qedhere
+    \end{equation*}
+  \end{enumerate}
+\end{proof}
+
+\subsection{Multiplication}
+\begin{definition}
+  For each $m, n \in \omega$, we define
+  \begin{equation*}
+    m \cdot n = M_m(n),
+  \end{equation*}
+  where $M_m: \omega \to \omega$ is the function such that $M_m(0) = 0$, and $M_m(\suc(n)) = m + M_m(n)$ for each $n \in \omega$.
+\end{definition}
+
+\begin{proposition}
+  The following statements hold for any $n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item $0 \cdot n = 0$.
+    \item $1 \cdot n = n$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Induction on $n$.
+    The inductive basis follows from $0 \cdot 0 = 0$.
+    Assuming $0 \cdot n = 0$, the inductive step follows from
+    \begin{equation*}
+      0 \cdot (n + 1) = 0 + 0 \cdot n = 0 + 0 = 0.
+    \end{equation*}
+    \item Induction on $n$.
+    The inductive basis follows from $1 \cdot 0 = 0$.
+    Assuming $1 \cdot n = n$, the inductive step follows from
+    \begin{equation*}
+      1 \cdot (n + 1) = 1 + 1 \cdot n = 1 + n = n + 1.
+      \qedhere
+    \end{equation*}
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}
+  The following statements hold for any $\ell, m, n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item (Right-distributivity) $(\ell + m) \cdot n = \ell \cdot n + m \cdot n$.
+    \item (Commutativity) $m \cdot n = n \cdot m$.
+    \item (Left-distributivity) $\ell \cdot (m + n) = \ell \cdot m + \ell \cdot n$.
+    \item (Associativity) $(\ell \cdot m) \cdot n = \ell \cdot (m \cdot n)$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Induction on $n$.
+    The inductive basis follows from
+    \begin{equation*}
+      (\ell + m) \cdot 0 = 0 = 0 + 0 = \ell \cdot 0 + m \cdot 0.
+    \end{equation*}
+    Assuming $(\ell + m) \cdot n = \ell \cdot n + m \cdot n$, the inductive step follows from
+    \begin{align*}
+      (\ell + m) \cdot (n + 1)
+      &= (\ell + m) + (\ell + m) \cdot n \\
+      &= (\ell + m) + (\ell \cdot n + m \cdot n) \\
+      &= (\ell + \ell \cdot n) + (m + m \cdot n) \\
+      &= \ell \cdot (n + 1) + m \cdot (n + 1).
+    \end{align*}
+    \item Induction on $n$.
+    The inductive basis follows from $m \cdot 0 = 0 = 0 \cdot m$.
+    Assuming $m \cdot n = n \cdot m$, the inductive step follows from
+    \begin{equation*}
+      m \cdot (n + 1)
+      = m + m \cdot n
+      = m \cdot n + m
+      = n \cdot m + 1 \cdot m
+      = (n + 1) \cdot m.
+    \end{equation*}
+    \item Striaghtforward from (a) and (b).
+    \item Induction on $n$.
+    The inductive basis follows from
+    \begin{equation*}
+      (\ell \cdot m) \cdot 0
+      = 0
+      = \ell \cdot 0
+      = \ell \cdot (m \cdot 0).
+    \end{equation*}
+    Assuming $(\ell \cdot m) \cdot n = \ell \cdot (m \cdot n)$, the inductive step follows from
+    \begin{align*}
+      (\ell \cdot m) \cdot (n + 1)
+      &= \ell \cdot m + (\ell \cdot m) \cdot n \\
+      &= \ell \cdot m + \ell \cdot (m \cdot n) \\
+      &= \ell \cdot (m + m \cdot n) \\
+      &= \ell \cdot (m \cdot (n + 1)).
+      \qedhere
+    \end{align*}
+  \end{enumerate}
+\end{proof}
+
+\subsection{Ordering}
+\begin{definition}
+  Let $X$ be a set.
+  A relation $R \subseteq X \times X$ is said to \emph{linearly order} $X$ (i.e., $R$ is a \emph{linear ordering} over $X$) if the following statements (i) and (ii) hold.
+  \begin{enumerate}[(i)]
+    \item (Transitivity) For any $x, y, z \in R$, if $(x, y) \in R$ and $(y, z) \in R$, then $(x, z) \in R$.
+    \item (Trichotomy) For any $x, y \in R$, exactly one of $x = y$, $(x, y) \in R$ and $(y, x) \in R$ holds.
+  \end{enumerate}
+  \par Also, a relation $R \subseteq X \times X$ is said to \emph{well-order} $X$ (i.e., $R$ is a \emph{well-ordering} over $X$) if $R$ linearly orders $X$ and the following statement (iii) holds.
+  \begin{enumerate}[(i),resume]
+    \item (Well-foundedness) For any nonempty subset $S$ of $X$, there exists an element $x \in S$ such that for each $y \in S$, either $x = y$ or $(x, y) \in R$ holds.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}
+  For all $m, n \in \omega$, we define
+  \begin{align*}
+    m < n \qquad &\iff \qquad m \in n, \\
+    m > n \qquad &\iff \qquad n \in m, \\
+    m \leq n \qquad &\iff \qquad m \in n \, \vee \, m = n, \\
+    m \geq n \qquad &\iff \qquad m = n \, \vee \, n \in m.
+  \end{align*}
+\end{definition}
+
+\begin{proposition}
+  The following statements hold for any $\ell, m, n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item If $\ell < m$ and $m < n$, then $\ell < n$.
+    \item If $\ell < m$ and $m \leq n$, then $\ell < n$.
+    \item If $\ell \leq m$ and $m < n$, then $\ell < n$.
+    \item If $\ell \leq m$ and $m \leq n$, then $\ell \leq n$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Striaghtforward from transitivity of elements of $\omega$.
+    \item Clearly $m = n$ implies $\ell < n$, and $m < n$ implies $\ell < n$ by (a).
+    \item Clearly $\ell = m$ implies $\ell < n$, and $\ell < m$ implies $\ell < n$ by (a).
+    \item Striaghtforward from (a).
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{proposition}
+  Let $m, n \in \omega$.
+  We have $m < n + 1$ if and only if $m \leq n$.
+\end{proposition}
+\begin{proof}
+  We have $m \in \suc(n)$ if and only if $m \in n \cup \{n\}$, if and only if either $m \in n$ or $m = n$.
+\end{proof}
+
+\begin{proposition}
+  The following statements hold for any $m, n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item $0 \leq n$.
+    \item If $m + 1 < n + 1$, then $m < n$.
+    \item $n \not < n$.
+    \item If $m < n$, then $m + 1 < n + 1$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Induction on $n$.
+    Clearly $0 \leq 0$.
+    If $0 \leq n$, then $0 \leq n \leq n + 1$.
+    \item We have $m < m + 1 \leq n$.
+    \item Induction on $n$.
+    Clearly $0 \not < 0$.
+    If $n \not < n$, then $n + 1 \not < n + 1$ by (b).
+    \item Induction on $n$.
+    Since $m \not < 0$, the inductive basis holds.
+    Now assume that $m < n$ implies $m + 1 < n + 1$.
+    If $m < n + 1$, then we have $m \leq n$, implying $m + 1 \leq n + 1 < (n + 1) + 1$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Trichotomy]
+  The following statements hold for any $m, n \in \omega$.
+  \begin{enumerate}[(a)]
+    \item At most one of $m = n$, $m < n$ and $m > n$ holds.
+    \item At least one of $m = n$, $m < n$ and $m > n$ holds.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item Neither $n = m < n$, $m < n < m$, nor $n < m = n$ holds.
+    \item Induction on $n$.
+    Clearly $m \geq 0$.
+    If $m \leq n$, then $m < n + 1$.
+    If $m > n$, then $m \geq n + 1$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{corollary}
+  The relation
+  \begin{equation*}
+    \mathord{<}_\omega = \{(m, n) \in \omega \times \omega: m < n\}
+  \end{equation*}
+  is a linear ordering over $\omega$.
+\end{corollary}
+\begin{proof}
+  Striaghtforward.
+\end{proof}
+
+\begin{theorem}
+  The relation $<_\omega$ well-orders $\omega$.
+  That is, every nonempty subset of $\omega$ admits a smallest element.
+\end{theorem}
+\begin{proof}
+  Suppose that $S \subseteq \omega$ does not have a smallest element.
+  We prove that $S = \varnothing$.
+  \par First, define
+  \begin{equation*}
+    R = \{m \in \omega: \forall n (n \in S \to m \leq n)\},
+  \end{equation*}
+  which is the set of lower bounds of $S$.
+  We show that $R$ is inductive.
+  Clearly $0 \in R$.
+  Now suppose that $m \in R$.
+  If $m \in S$, then $m$ is a smallest element of $S$ since $m \leq n$ for each $n \in S$, contradition.
+  Thus, $m \notin S$, implying $m + 1 \in R$.
+  It follows that $R$ is inductive, i.e., $R = \omega$.
+  \par Now we show that $S$ is empty.
+  Suppose that $n \in S$.
+  Then since $n + 1 \in \omega = R$, we have $n \geq n + 1$, contradition.
+  Thus, $S = \varnothing$.
 \end{proof}
 
 \end{document}
