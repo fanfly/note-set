@@ -794,7 +794,7 @@ From now on, we adopt the general representation for the successors of $\varnoth
       = n \cdot m + 1 \cdot m
       = (n + 1) \cdot m.
     \end{equation*}
-    \item Striaghtforward from (a) and (b).
+    \item Straightforward from (a) and (b).
     \item Induction on $n$.
     The inductive basis follows from
     \begin{equation*}
@@ -851,10 +851,10 @@ From now on, we adopt the general representation for the successors of $\varnoth
 \begin{proof}
   \leavevmode
   \begin{enumerate}[(a)]
-    \item Striaghtforward from transitivity of elements of $\omega$.
+    \item Straightforward from transitivity of elements of $\omega$.
     \item Clearly $m = n$ implies $\ell < n$, and $m < n$ implies $\ell < n$ by (a).
     \item Clearly $\ell = m$ implies $\ell < n$, and $\ell < m$ implies $\ell < n$ by (a).
-    \item Striaghtforward from (a).
+    \item Straightforward from (a).
     \qedhere
   \end{enumerate}
 \end{proof}
@@ -921,7 +921,7 @@ From now on, we adopt the general representation for the successors of $\varnoth
   is a linear ordering over $\omega$.
 \end{corollary}
 \begin{proof}
-  Striaghtforward.
+  Straightforward.
 \end{proof}
 
 \begin{theorem}
@@ -947,5 +947,309 @@ From now on, we adopt the general representation for the successors of $\varnoth
   Then since $n + 1 \in \omega = R$, we have $n \geq n + 1$, contradition.
   Thus, $S = \varnothing$.
 \end{proof}
+
+\section{April 13, 2021}
+\subsection{Equivalence Relations}
+\begin{definition}
+  Let $X$ be a set.
+  A relation $E \subseteq X \times X$ is an \emph{equivalence relation} over $X$ if the following conditions hold for any $x, y, z \in X$.
+  \begin{enumerate}[(i)]
+    \item (Reflexivity) For any $x \in X$, we have $(x, x) \in E$.
+    \item (Symmetry) For any $x, y \in X$, $(x, y) \in E$ implies $(y, x) \in E$.
+    \item (Transitivity) For any $x, y, z \in X$, $(x, y) \in E$ and $(y, z) \in E$ imply $(x, z) \in E$.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}
+  Let $E$ be an equivalence relation over a set $X$.
+  For each $x \in X$, the \emph{equivalence class} of $x$ in $X$ with respect to $E$, denoted by $[x]_E$, is defined by
+  \begin{equation*}
+    [x]_E = \{y \in X: (x, y) \in E\}.
+  \end{equation*}
+\end{definition}
+
+\subsection{Integral Systems}
+In this section, we construct an integral system $\zeta$ from the Peano system $\omega$.
+
+\begin{definition}
+  Let $Z$ be the relation over $\omega \times \omega$ such that
+  for each $m, m', n, n' \in \omega$,
+  \begin{equation*}
+    ((m, n), (m', n')) \in Z \qquad \iff \qquad m + n' = m' + n.
+  \end{equation*}
+\end{definition}
+
+\begin{proposition}
+  $Z$ is an equivalence relation over $\omega \times \omega$.
+\end{proposition}
+\begin{proof}
+  Let $m, m', m'', n, n', n''$ be arbitrary elements of $\omega$.
+  Clearly $((m, n), (m, n)) \in Z$.
+  If $((m, n), (m', n')) \in Z$, then we have $m' + n = m + n'$, implying $((m', n'), (m, n)) \in Z$.
+  Now suppose that
+  \begin{equation*}
+    ((m, n), (m', n')), \quad ((m', n'), (m'', n'')) \quad \in \quad Z.
+  \end{equation*}
+  Then we have
+  \begin{align*}
+    (m' + n') + (m + n'')
+    &= (m + n') + (m' + n'') \\
+    &= (m' + n) + (m'' + n') \\
+    &= (m' + n') + (m'' + n),
+  \end{align*}
+  implying $m + n'' = m'' + n$.
+  Thus, $((m, n), (m'', n'')) \in Z$.
+\end{proof}
+
+\begin{definition}
+  Let $\zeta = (\omega \times \omega) / Z$.
+\end{definition}
+
+\begin{proposition}
+  Suppose that
+  \begin{equation*}
+    [(k, \ell)]_Z = [(k', \ell')]_Z \qquad \text{and} \qquad [(m, n)]_Z = [(m', n')]_Z
+  \end{equation*}
+  hold for some $k, k', \ell, \ell', m, m', n, n' \in \omega$.
+  Then the following statements are true.
+  \begin{enumerate}[(a)]
+    \item $[(k + m, \ell + n)]_Z = [(k' + m', \ell' + n')]_Z$.
+    \item $[(n, m)]_Z = [(n', m')]_Z$.
+    \item $[(km + \ell n, kn + \ell m)]_Z = [(k'm' + \ell'n', k'n' + \ell'm')]_Z$.
+    \item If $k + n < \ell + m$, then $k' + n' < \ell' + m'$.
+  \end{enumerate}
+\end{proposition}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item We have
+    \begin{equation*}
+      (k + m) + (\ell' + n')
+      = (k + \ell') + (m + n')
+      = (k' + \ell) + (m' + n)
+      = (k' + m') + (\ell + n).
+    \end{equation*}
+    \item We have $n + m' = m' + n = m + n' = n' + m$.
+    \item Since
+    \begin{align*}
+      (km + \ell n) + (k'n + \ell'm)
+      &= (k + \ell')m + (k' + \ell)n \\
+      &= (k' + \ell)m + (k + \ell')n \\
+      &= (k'm + \ell'n) + (kn + \ell m),
+    \end{align*}
+    we have
+    \begin{equation*}
+      [(km + \ell n, kn + \ell m)]_Z = [(k'm + \ell'n, k'n + \ell'm)]_Z.
+    \end{equation*}
+    Also, since
+    \begin{align*}
+      (k'm + \ell'n) + (k'n' + \ell'm')
+      &= k'(m + n') + \ell'(m' + n) \\
+      &= k'(m' + n) + \ell'(m + n') \\
+      &= (k'm' + \ell'n') + (k'n + \ell'm),
+    \end{align*}
+    we have
+    \begin{equation*}
+      [(k'm + \ell'n, k'n + \ell'm)]_Z = [(k'm' + \ell'n', k'n' + \ell'm')]_Z.
+    \end{equation*}
+    It follows that
+    \begin{equation*}
+      [(km + \ell n, kn + \ell m)]_Z = [(k'm + \ell'n, k'n + \ell'm)]_Z = [(k'm' + \ell'n', k'n' + \ell'm')]_Z.
+    \end{equation*}
+    \item Since
+    \begin{align*}
+      (\ell + m) + (k' + n')
+      &= (k' + \ell) + (m + n') \\
+      &= (k + \ell') + (m' + n) \\
+      &= (\ell' + m') + (k + n) \\
+      &< (\ell' + m') + (\ell + m) \\
+      &= (\ell + m) + (\ell' + m'),
+    \end{align*}
+    we have $k' + n' < \ell' + m'$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{definition}
+  Define
+  \begin{equation*}
+    0_\zeta = [(0, 0)]_Z \qquad \text{and} \qquad 1_\zeta = [(1, 0)]_Z.
+  \end{equation*}
+  For any $k, \ell, m, n \in \omega$, we define
+  \begin{align*}
+    [(k, \ell)]_Z + [(m, n)]_Z \quad &= \quad [(k + m, \ell + n)]_Z, \\
+    -[(m, n)]_Z \quad &= \quad [(n, m)]_Z, \\
+    [(k, \ell)]_Z \cdot [(m, n)]_Z \quad &= \quad [(km + \ell n, kn + \ell m)]_Z,
+  \end{align*}
+  and
+  \begin{equation*}
+    [(k, \ell)]_Z < [(m, n)]_Z \quad \iff \quad k + n < m + \ell.
+  \end{equation*}
+  Also, let
+  \begin{equation*}
+    \zeta^* = \{a \in \zeta: a \neq 0_\zeta\}, \qquad
+    \zeta^+ = \{a \in \zeta: a > 0_\zeta\}, \qquad
+    \zeta^- = \{a \in \zeta: a < 0_\zeta\}.
+  \end{equation*}
+\end{definition}
+
+\begin{theorem}
+  The following statements hold for any $a, b, c \in \zeta$.
+  \begin{enumerate}[(a)]
+    \item $a + b = b + a$.
+    \item $(a + b) + c = a + (b + c)$.
+    \item $0_\zeta + a = a$ and $-a + a = 0_\zeta$.
+    \item $a \cdot b = b \cdot a$.
+    \item $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.
+    \item $1_\zeta \cdot a = 1_\zeta$.
+    \item $a \cdot (b + c) = a \cdot b + a \cdot c$.
+    \item Exactly one of $a < b$, $a = b$ and $a > b$ holds.
+    \item If $a < b$ and $b < c$, then $a < c$.
+    \item If $b < c$, then $a + b < a + c$.
+    \item If $a > 0_\zeta$ and $b > 0_\zeta$, then $ab > 0_\zeta$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[(a)]
+    \item For any $k, \ell, m, n \in \omega$, we have
+    \begin{equation*}
+      [(k, \ell)]_Z + [(m, n)]_Z
+      = [(k + m, \ell + n)]_Z
+      = [(m + k, n + \ell)]_Z
+      = [(m, n)]_Z + [(k, \ell)]_Z.
+    \end{equation*}
+    \item For any $k, \ell, m, n, p, q \in \omega$, we have
+    \begin{align*}
+      ([(k, \ell)]_Z + [(m, n)]_Z) + [(p, q)]_Z
+      &= [(k+m, \ell+n)]_Z + [(p, q)]_Z \\
+      &= [((k+m)+p, (\ell+n)+q)]_Z \\
+      &= [(k+(m+p), \ell+(n+q))]_Z \\
+      &= [(k, \ell)]_Z + ([(m, n)]_Z + [(p, q)]_Z).
+    \end{align*}
+    \item For any $m, n \in \omega$, we have
+    \begin{equation*}
+      [(0, 0)]_Z + [(m, n)]_Z = [(0 + m, 0 + n)]_Z = [(m, n)]_Z
+    \end{equation*}
+    and
+    \begin{equation*}
+      [(n, m)]_Z + [(m, n)]_Z = [(n + m, m + n)]_Z = [(0, 0)]_Z.
+    \end{equation*}
+    \item For any $k, \ell, m, n \in \omega$, we have
+    \begin{equation*}
+      [(k, \ell)]_Z \cdot [(m, n)]_Z
+      = [(km + \ell n, kn + \ell m)]_Z
+      = [(mk + n\ell, m\ell + nk)]_Z
+      = [(m, n)]_Z \cdot [(k, \ell)]_Z.
+    \end{equation*}
+    \item For any $k, \ell, m, n, p, q \in \omega$, we have
+    \begin{align*}
+      ([(k, \ell)]_Z \cdot [(m, n)]_Z) \cdot [(p, q)]_Z
+      &= [(km + \ell n, kn + \ell m)]_Z ] \cdot [(p, q)]_Z \\
+      &= [((km + \ell n)p + (kn + \ell m)q, (km + \ell n)q + (kn + \ell m)p)]_Z \\
+      &= [(kmp + knq + \ell mq + \ell np, kmq + knp + \ell mp + \ell nq)]_Z \\
+      &= [(k(mp + nq) + \ell(mq + np), k(mq + np) + \ell(mp + nq))]_Z \\
+      &= [(k, \ell)]_Z \cdot [(mp + nq, mq + np)]_Z \\
+      &= [(k, \ell)]_Z \cdot ([(m, n)]_Z \cdot [(p, q)]_Z).
+    \end{align*}
+    \item For any $m, n \in \omega$, we have
+    \begin{equation*}
+      [(1, 0)]_Z \cdot [(m, n)]_Z = [(1m + 0n, 0m + 1n)]_Z = [(m, n)]_Z.
+    \end{equation*}
+    \item For any $k, \ell, m, n, p, q \in \omega$, we have
+    \begin{align*}
+      [(k, \ell)]_Z \cdot ([(m, n)]_Z + [(p, q)]_Z)
+      &= [(k, \ell)]_Z \cdot [(m + p, n + q)]_Z \\
+      &= [(k(m+p) + \ell(n+q), k(n+q) + \ell(m+p))]_Z \\
+      &= [(km+kp+\ell n+\ell q, kn+kq+\ell m+\ell p)]_Z \\
+      &= [(km+\ell n, kn+\ell m)]_Z + [(kp+\ell q, kq+\ell p)]_Z \\
+      &= [(k, \ell)]_Z \cdot [(m, n)]_Z + [(k, \ell)]_Z \cdot [(p, q)]_Z.
+    \end{align*}
+    \item For any $k, \ell, m, n \in \omega$, we have
+    \begin{align*}
+      [(k, \ell)]_Z = [(m, n)]_Z \quad &\iff \quad k + n = m + \ell, \\
+      [(k, \ell)]_Z < [(m, n)]_Z \quad &\iff \quad k + n < m + \ell, \\
+      [(k, \ell)]_Z > [(m, n)]_Z \quad &\iff \quad k + n > m + \ell.
+    \end{align*}
+    \item Suppose that
+    \begin{equation*}
+      [(k, \ell)]_Z < [(m, n)]_Z \qquad \text{and} \qquad [(m, n)]_Z < [(p, q)]_Z
+    \end{equation*}
+    for some $k, \ell, m, n, p, q \in \omega$.
+    Then we have
+    \begin{align*}
+      n + (k + q)
+      &= q + (k + n) \\
+      &< q + (m + \ell) \\
+      &= \ell + (m + q) \\
+      &< \ell + (p + n) \\
+      &= n + (p + \ell).
+    \end{align*}
+    Thus, $k + q < p + \ell$, and it follows that $[(k, \ell)]_Z < [(p, q)]_Z$.
+    \item Suppose that $[(m, n)]_Z < [(p, q)]_Z$ for some $m, n, p, q \in \omega$.
+    We have $m + q < p + n$.
+    Then for any $k, \ell \in \omega$,
+    \begin{equation*}
+      (k + m) + (\ell + q)
+      = (k + \ell) + (m + q)
+      < (k + \ell) + (p + n)
+      = (k + p) + (\ell + n).
+    \end{equation*}
+    It follows that
+    \begin{equation*}
+      [(k, \ell)]_Z + [(m, n)]_Z
+      = [(k + m, \ell + n)]_Z
+      < [(k + p, \ell + q)]_Z
+      = [(k, \ell)]_Z + [(p, q)]_Z.
+    \end{equation*}
+    \item Todo.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\subsection{Rational Systems}
+In this section, we construct a rational system $\eta$ from the integral system $\zeta$.
+
+\begin{definition}
+  Let $R$ be the relation over $\zeta \times \zeta^*$ such that for each $a, a' \in \zeta$ and $b, b' \in \zeta^*$,
+  \begin{equation*}
+    ((a, b), (a', b')) \in R \qquad \iff \qquad a \cdot b' = a' \cdot b.
+  \end{equation*}
+\end{definition}
+
+\begin{proposition}
+  $R$ is an equivalence relation over $\zeta \times \zeta^*$.
+\end{proposition}
+
+\begin{definition}
+  Let $\eta = (\zeta \times \zeta^*) / R$.
+\end{definition}
+
+\begin{definition}
+  Define
+  \begin{equation*}
+    0_\eta = [(0_\zeta, 1_\zeta)]_R \qquad \text{and} \qquad 1_\eta = [(1_\zeta, 1_\zeta)]_R.
+  \end{equation*}
+  For any $a, c \in \zeta$ and $b, d \in \zeta^*$, we define
+  \begin{align*}
+    [(a, b)]_R + [(c, d)]_R \quad &= \quad [(ad + bc, bd)]_R, \\
+    -[(a, b)]_R \quad &= \quad [(-a, b)]_R, \\
+    [(a, b)]_R \cdot [(c, d)]_R \quad &= \quad [(ac, bd)]_R,
+  \end{align*}
+  and
+  \begin{equation*}
+    [(a, b)]_Z < [(c, d)]_Z \quad \iff \quad ad \cdot bd < bc \cdot bd.
+  \end{equation*}
+  If $a \in \zeta^*$, then we define
+  \begin{equation*}
+    \bigl([(a, b)]_R\bigr)^{-1} \quad = \quad [(b, a)]_R.
+  \end{equation*}
+  Also, let
+  \begin{equation*}
+    \eta^* = \{q \in \eta: q \neq 0_\eta\}, \qquad
+    \eta^+ = \{q \in \eta: q > 0_\eta\}, \qquad
+    \eta^- = \{q \in \eta: q < 0_\eta\}.
+  \end{equation*}
+\end{definition}
 
 \end{document}
