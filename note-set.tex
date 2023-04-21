@@ -1252,4 +1252,68 @@ In this section, we construct a rational system $\eta$ from the integral system 
   \end{equation*}
 \end{definition}
 
+\section{April 20, 2021}
+\subsection{Real Systems}
+\begin{definition}
+  A \emph{Dedekind cut} is set $X \subseteq \eta$ satisfying the following properties.
+  \begin{enumerate}[(i)]
+    \item $X \neq \varnothing$ and $X \neq \eta$.
+    \item For any $p, q \in \eta$, if $q \in X$ and $p < q$, then $p \in X$.
+    \item $X$ does not admit a greatest element.
+  \end{enumerate}
+  Let $\lambda$ denote the set of all Dedekind cuts.
+\end{definition}
+
+\begin{definition}
+  Define
+  \begin{equation*}
+    0_\lambda = \{q \in \eta: q < 0_\eta\}
+    \qquad \text{and} \qquad
+    1_\lambda = \{q \in \eta: q < 1_\eta\}.
+  \end{equation*}
+  For any $X, Y \in \lambda$, we define
+  \begin{align*}
+    X + Y \quad &= \quad \{r \in \eta: \exists p \exists q (p \in X \wedge q \in Y \wedge p + q = r)\}, \\
+    -X \quad &= \quad \{p \in \eta: \exists q (q \in \eta \setminus X \wedge p + q < 0_\eta)\}
+  \end{align*}
+  and
+  \begin{equation*}
+    X < Y \quad \iff \quad X \subsetneq Y.
+  \end{equation*}
+  Also, let
+  \begin{equation*}
+    \lambda^* = \{q \in \lambda: q \neq 0_\lambda\}, \qquad
+    \lambda^+ = \{q \in \lambda: 0_\lambda < q\}, \qquad
+    \lambda^- = \{q \in \lambda: q < 0_\lambda\}.
+  \end{equation*}
+\end{definition}
+
+\begin{definition}
+  Let
+  \begin{equation*}
+    X \odot Y \quad = \quad \eta \setminus \{r \in \eta: \exists p \exists q (p \in \eta \setminus X \wedge q \in \eta \setminus Y \wedge p \cdot q = r)\}
+  \end{equation*}
+  for any $X, Y \in \{0_\lambda\} \cup \lambda^+$.
+\end{definition}
+
+\begin{definition}
+  For any $X \in \lambda$, let $X^+ = \max(\{X, 0\})$ and $X^- = \max(\{-X, 0\})$.
+\end{definition}
+
+\begin{definition}
+  Let
+  \begin{equation*}
+    X \cdot Y \quad = \quad (X^+ \odot Y^+ + X^- \odot Y^-) + (-(X^+ \odot Y^- + X^- \odot Y^+))
+  \end{equation*}
+  for any $X, Y \in \lambda$.
+\end{definition}
+
+\begin{definition}
+  Let
+  \begin{equation*}
+    X^{-1} \quad = \quad \{p \in \eta: \exists q (q \in \eta \setminus X \wedge p \cdot q < 1_\eta)\}
+  \end{equation*}
+  for any $X \in \lambda^*$.
+\end{definition}
+
 \end{document}
